@@ -1,0 +1,76 @@
+############ TP QR CODE:
+
+
+-norme SO 18004
+-voir standard AIMI
+
+spécification : type stockage charactere
+
+version : taille -> nombre de charactere
+
+La redondance se rapporte à la qualité ou à l'état d'être en sur-nombre, par rapport à la normale ou à la logique. Ce qui peut avoir la connotation négative de superflu, mais aussi un sens positif quand cette redondance est voulue afin de prévenir un dysfonctionnement.
+
+http://www-igm.univ-mlv.fr/~dr/XPOSE2011/QRCode/fonctionnement.html    
+
+
+Etapes:
+
+(Creation du messages)
+
+1 - Analyse des données à encoder et paramétrage du niveau de code correcteur.
+             Si pas de niveau de code correcteur spécifié -> plus petite version de QR Code.
+
+2 - Convertion des données dans un flux de bytes.
+    encodage des donnees (+ concatenation)
+	ajout complementaire
+		indicateur de mode (alpha numeric,...) 4bits
+		nombre de caractere [...]
+	Edition du code de correction d'erreur -> choisir niveau de correction
+	creation structure messages finale (block d'info/bits)
+
+3 - Implémentation de la correction des erreurs.
+         séparation en blocs des bits de données et géneration du codes correcteurs.
+	
+	(Capacité à corriger les erreurs :
+    Niveau L : environ 7 % de redondance
+    Niveau M : environ 15 %
+    Niveau Q : environ 25 %
+    Niveau H : environ 30 %
+    -> Code correcteur, code de Redd Solomon (& Code de Hamming ))
+
+4 - Insérer les données avec le code correcteur dans la matrice.
+    
+    Utilisation de masque de patterns (Timing pattern, pattern de detection, pattern d'alignement)
+
+	Placement des éléments
+	->motifs de positionnement
+	->les séparateur (pour distinguer les motifs de pos)
+	-> motifs de synchonisation/Timming patterns permettant de percevoir les contrastes entre les modules (clairs et foncés) et il permettent de determiner la version du Qr code (avec ça taille)
+	->motifs de d'alignement (pareil mais plus petit que les motifs de positionnement), facilite la lecture en cas de deformation de la matrice.
+	->zone tranquille autour du symbol/matrice.
+
+	Placement des info/codewords
+
+5 - Génération de la matrice et évaluation du résultat retourné.
+             optimisisation de la balance entre les modules noirs et les modules blancs et minimisation des occurrences de patterns indésirables
+
+	Creation du masque
+	Application du masque
+	Informations de format
+	Informations de version
+
+6 - Génération du QR Code au format image.
+
+(lecture
+    1 - Reconnaître les bits 1 ou 0.
+             Le but est de différencier les modules noirs des modules blancs.
+    2 - Identifier le taux de code correcteur.
+    3 - Identifier la version du QR Code.
+    4 - Découvrir la région à décoder.
+    5 - Lire les données et le code correcteur.
+    6 - Détecter/Corriger les erreurs.
+    7 - Décoder les données.
+    8 - Afficher le résultat.
+)
+
+Exemple : ZXing Open source en java
