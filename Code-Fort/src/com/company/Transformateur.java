@@ -5,7 +5,7 @@ package com.company;
  */
 public class Transformateur {
     /**
-     * permet de transfromer un messsage en byte pour l'integrer au gr code (transformation en grille)
+     * permet de transfromer un tableau de bloolean en tableau de tableau carre ()
      * @param mess
      * @return
      */
@@ -13,13 +13,14 @@ public class Transformateur {
         System.out.println("messageEnGrille");
         int y = 0;
         boolean[][] grille = new boolean[taille][taille];
-        for(int i = 0; i < taille; i++) {
+        for(int i = 0; i < taille; i++) { //(pour noter de gauche a droite du haut vers le bas au lieu de l'inverse : inverser i et j )
             for(int j = 0; j < taille; j++){
                 if(y < mess.length){
                     grille[i][j] = mess[y];
                     y++;
                 }else{
-                    grille[i][j] = false;
+                    break;
+                    //grille[i][j] = false;
                 }
                 System.out.print(grille[i][j]+" ");
             }
@@ -27,7 +28,6 @@ public class Transformateur {
         }
 
         grille = masque(grille);//a faire
-        grille = systeme_err(grille);//a faire
         grille = contour(grille);
 
 
@@ -83,7 +83,7 @@ public class Transformateur {
      * @param b
      * @return
      */
-    public static boolean[][] systeme_err(boolean[][] b){
+    public static byte[] systeme_err(byte[] b){
         //[...]
         return b;
     }
