@@ -8,6 +8,6 @@ public class Main {
 
         //pour indiquer le message
         String message;
-        TestWay test = new TestWay();
+        TestText test = new TestText();
     }
 }

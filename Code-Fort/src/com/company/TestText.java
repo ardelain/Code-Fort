@@ -9,7 +9,7 @@ import java.util.Vector;
 /**
  *
  */
-public class TestWay {
+public class TestText {
 
     JFrame frame;
     Vector<Integer> vec;
@@ -22,7 +22,7 @@ public class TestWay {
     /**
      *
      */
-    public TestWay() {
+    public TestText() {
         frame = new JFrame("Test");
         frame.setSize(300, 200);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -75,6 +75,6 @@ public class TestWay {
         catch (IllegalAccessException e) {}
         catch (UnsupportedLookAndFeelException e) {}
 
-        new TestWay();
+        new TestText();
     }*/
 }
