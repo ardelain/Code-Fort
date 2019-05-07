@@ -1,5 +1,8 @@
 package com.company;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  */
@@ -73,6 +76,32 @@ public class Transformateur {
             }else{
                 nb[nb.length-2][i] = false;//ligne blanche
             }
+        }
+
+        return nb;
+    }
+
+    public static boolean[][] ajout_rempart_info(boolean[][] b){//,boolean[] b_info, int racine_sup
+        System.out.println("contour ajout_r_info ");
+
+        boolean[][] nb = new boolean[b.length+6][b.length+6];
+
+        //transfert du contenu de la grille
+        for(int i = 0;i<b.length;i++){
+            for(int j = 0;j<b.length;j++){
+                nb[i+3][j+3] = b[i][j];
+            }
+        }
+        //ajout des bords
+        for(int i = 0;i<nb.length;i++){
+            //haut
+            nb[i][0] = true;
+            //bas
+            nb[i][nb.length-1] = true;
+            //gauche
+            nb[0][i] = true;//ligne noire
+            //droite
+            nb[nb.length-1][i] = true;//ligne noire
         }
 
         return nb;

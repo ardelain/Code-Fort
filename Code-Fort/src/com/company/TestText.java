@@ -53,7 +53,6 @@ public class TestText {
 
                 //QRCODE
                 QRCode qr = new QRCode(text.getText());
-
             }
         });
         panel.add(text);

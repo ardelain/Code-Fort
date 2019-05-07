@@ -35,11 +35,14 @@ public class QRCode {
         int taille = tailleCode(message_transform_b);
         //transformation en grille de boolean (0 blance, 1 noire)
 
-        Double d = Math.ceil(Math.sqrt(message_transform_b.length));//carre de la taille du message arrondi a l'entier superieur pour mise en tableau de tableau ('carre')
+        Double d = Math.ceil(Math.sqrt(message_transform_b.length));//racine carre de la taille du message arrondi a l'entier superieur pour mise en tableau de tableau ('carre')
         int taille_cote_grille = d.intValue();
+
         System.out.println("taille_cote_grille "+taille_cote_grille);
         //int cote = message_transform_b.length / 2 ;
+
         boolean[][] grille_boolean = Transformateur.messageEnGrille(message_transform_b,taille_cote_grille);//inscrire dans 2 dimension
+        grille_boolean = Transformateur.ajout_rempart_info(grille_boolean);
         System.out.println("grille apres transformation: "+ grille_boolean.toString());
 
         //creation de la grille graphiquement

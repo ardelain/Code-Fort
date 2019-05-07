@@ -2,7 +2,6 @@ package com.company;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -33,7 +32,6 @@ public class Grille extends JFrame
         //rendre visible
         f.setVisible(true);
     }
-
 
     /*public static void main(String argv[])
     {
