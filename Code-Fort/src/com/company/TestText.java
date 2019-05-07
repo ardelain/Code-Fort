@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 /**
- *
+ * Classe pop up de saisie texte swing
  */
 public class TestText {
 
@@ -34,7 +34,7 @@ public class TestText {
     }
 
     /**
-     *
+     * mise en place zone texte et bouton de confirmation de saisie
      * @return
      */
     private Container contentPane() {
@@ -44,15 +44,14 @@ public class TestText {
         button = new JButton("Test");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //lab.setText(text.getText());
                 message = text.getText();
                 frame.setVisible(false);
 
                 //indiquer si il y a une image
                 //[...]
 
-                //QRCODE
-                QRCode qr = new QRCode(text.getText());
+                //Creation du Co 2D selon le texte saisie
+                CodeFort qr = new CodeFort(text.getText());
             }
         });
         panel.add(text);

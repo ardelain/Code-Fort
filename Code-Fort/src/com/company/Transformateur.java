@@ -29,11 +29,6 @@ public class Transformateur {
             }
             System.out.print("\n");
         }
-
-        grille = masque(grille);//a faire
-        grille = contour(grille);
-
-
         return grille;
     }
 
