@@ -10,23 +10,25 @@ import java.awt.Graphics;
  */
 public class Grille extends JFrame
 {
+
     /**
      *
-     * @param b
-     * @param taille
+     * @param message
+     * @param info
      */
-    public Grille(boolean[][] b, int taille)
+    public Grille(boolean[][] message, boolean[][] info, int taille)
     {
-        System.out.println("Grille");
+        System.out.println("Grille JFrame");
         //creation de la fenetre
         JFrame f = new JFrame("Affichage QR CODE en Java");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        System.out.println("taille "+taille);
-        System.out.println("b "+b.length+"  b[0] "+b[0].length);
         f.setSize(500, 500);
 
+        System.out.println("taille message"+taille);
+        System.out.println("message length "+message.length+"  message[0] length "+message[0].length);
+
         //creation du message
-        JPanel grille = new Code2D(10,taille,b);//taille/
+        JPanel grille = new Code2D(10,taille,message,info);//taille/
         f.add(grille);
 
         //rendre visible
@@ -53,11 +55,13 @@ class Code2D extends JPanel
     int Cote_SIZE;
 
     boolean[][] code;
+    boolean[][] info;
 
-    public Code2D(int code_SIZE, int cote_SIZE, boolean[][] code) {
+    public Code2D(int code_SIZE, int cote_SIZE, boolean[][] code, boolean[][] info) {
         Code_SIZE = code_SIZE;
         Cote_SIZE = cote_SIZE;
         this.code = code;
+        this.info = info;
     }
 
     public void paintComponent(Graphics g)

@@ -17,7 +17,6 @@ public class Convertisseur {
         return b;
     }
 
-
    //Converting from bytes to booleans:
 
     /**

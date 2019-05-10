@@ -1,5 +1,6 @@
 package com.company;
 
+import javax.swing.text.MaskFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,8 +118,63 @@ public class Transformateur {
      * @param b
      * @return
      */
-    public static boolean[][] masque(boolean[][] b){
+    public static boolean[][] masque(boolean[][] b,int masque){
         //[...]
+        for(int i = 0; i< b.length; i++){
+            for(int j = 0; j< b.length; j++){
+                if(b[i][j]){
+
+                }
+                //int x = i-1;
+                if (getDataMaskBit(masque, i, j)) {
+                    b[i][j] = !b[i][j];
+                }
+
+            }
+        }
         return b;
     }
+
+    /**
+     * Copyright 2008 ZXing authors
+     * Return the mask bit for "getMaskPattern" at "x" and "y". See 8.8 of JISX0510:2004 for mask
+     * pattern conditions.
+     */
+    static boolean getDataMaskBit(int maskPattern, int x, int y) {
+        int intermediate;
+        int temp;
+        switch (maskPattern) {
+            case 0:
+                intermediate = (y + x) & 0x1;
+                break;
+            case 1:
+                intermediate = y & 0x1;
+                break;
+            case 2:
+                intermediate = x % 3;
+                break;
+            case 3:
+                intermediate = (y + x) % 3;
+                break;
+            case 4:
+                intermediate = ((y / 2) + (x / 3)) & 0x1;
+                break;
+            case 5:
+                temp = y * x;
+                intermediate = (temp & 0x1) + (temp % 3);
+                break;
+            case 6:
+                temp = y * x;
+                intermediate = ((temp & 0x1) + (temp % 3)) & 0x1;
+                break;
+            case 7:
+                temp = y * x;
+                intermediate = ((temp % 3) + ((y + x) & 0x1)) & 0x1;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid mask pattern: " + maskPattern);
+        }
+        return intermediate == 0;
+    }
+
 }
