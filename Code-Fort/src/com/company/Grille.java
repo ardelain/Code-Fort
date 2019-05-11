@@ -1,9 +1,13 @@
 package com.company;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import java.awt.Color;
-import java.awt.Graphics;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  *  creation de la grille graphiquement (swing : JFrame)
@@ -22,7 +26,7 @@ public class Grille extends JFrame
         //creation de la fenetre
         JFrame f = new JFrame("Affichage QR CODE en Java");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setSize(500, 500);
+        f.setSize(500, 550);
 
         System.out.println("taille message"+taille);
         System.out.println("message length "+message.length+"  message[0] length "+message[0].length);
@@ -31,8 +35,40 @@ public class Grille extends JFrame
         JPanel grille = new Code2D(10,taille,message,info);//taille/
         f.add(grille);
 
+        JButton button = new JButton("Open file");
+        //ajout bouton pour générer l'image correspondante
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                /* init du filechooser */
+                JFileChooser fc = new JFileChooser();
+                /* affichage du dialog et test si le bouton ok est pressé */
+                if (fc.showOpenDialog(f) == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        /* demande au système d'ouvrir le fichier précédemment séléctionné */
+                        Desktop.getDesktop().open(fc.getCurrentDirectory());
+                        //generation automatique de l'image
+                        BufferedImage img = new BufferedImage(grille.getWidth(), grille.getHeight(), BufferedImage.TYPE_INT_RGB);
+                        Graphics2D g2d = img.createGraphics();
+                        grille.printAll(g2d);
+                        g2d.dispose();
+                        try {
+                            ImageIO.write(img, "png", new File(fc.getSelectedFile()+".png"));
+                        }catch (Exception ee){
+                            System.err.println("PROBLEME GENERATION IMAGE");
+                            return;
+                        }
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+        f.add(button, BorderLayout.SOUTH);
+
         //rendre visible
         f.setVisible(true);
+
+
     }
 
     /*public static void main(String argv[])

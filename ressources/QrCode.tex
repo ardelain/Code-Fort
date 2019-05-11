@@ -14,58 +14,91 @@
 \begin{document}
 \maketitle
 \part*{Introduction}
-Protocoles de communication graphique 2D ou Code barre  bidimensionnel  ou Codes matriciels\\
-Les protocoles de communication graphique [...]\\
-Les codes barres [...]\\
-Les codes 2D [ Qr code...]\\
+Vous avez sûrement déjà remarqué des pictogrammes fait de petits carrés noirs et blancs que ce soit sur des affichages publicitaires, sur un e-billet, sur l’emballage des produits de consommation, ou même dans un magazine, et vous vous êtes demandé de quoi s’agit-il? En effet, c’est un code 2D appelé plus généralement Tags, QR Codes ou Flashcodes; l'héritier du code barre à une dimension mais ayant une technologie plus avancée.\\
+
+Les codes 2D permettent de passer d'un support physique (papier, écran…) au format électronique en une fraction de seconde, dans le but de traiter ou capturer des données (URL, mail, carte de visite…).\\
+
+Ils se caractérisent par le fait qu'ils contiennent des informations à la fois verticalement et horizontalement. Par conséquent les codes barres 2D contiennent beaucoup plus d'informations (stockées dans une matrice 2D) qu'un code barre classique à une dimension.\\
+
+ 
+Le format des codes à barres 2D est généralement issu de deux technologies d'encodage : datamatrix et QR Code. Ces technologies d'encodage permettent de stocker une grande quantité d'information sur un espace réduit en comparaison des codes à barres à une seule dimension. \\
+
+Pour notre projet, on s'est basé sur la deuxième technologie d'encodage qu'est le QR Code, dont le format est direct, qui permet de contenir directement un grand nombre de données dans le code, et qui peut être décodé rapidement.
+
+
 \part*{Sujet}
 \includepdf[scale=0.80]{TPReseaux2.pdf}
 \part{Fonctionnement}
 
-$\bullet$ 1 - Analyse des données à encoder et paramétrage du niveau de code correcteur.
-             Si pas de niveau de code correcteur spécifié $\rightarrow$ plus petite version de QR Code.\\
+$\bullet$ 1 - Tout d'abord, il faut analyser les données à encoder et paramétrer le niveau de code correcteur (expliqué plus loin).
+Cela permet d'analyser les entrées afin d'obtenir la variété des caractère à encoder. 
+\\ \\
+$\bullet$ 2 - Il faut ensuite convertir les données dans un flux de bytes.\\
 \\
-$\bullet$ 2 - Convertion des données dans un flux de bytes.\\
-    encodage des donnees (+ concatenation)\\
-	ajout complementaire\\
-		indicateur de mode (alpha numeric,...) 4bits\\
-		nombre de caractere [...]\\
-	Edition du code de correction d'erreur $\rightarrow$ choisir niveau de correction\\
-	creation structure messages finale (block d'info/bits)\\
+Il faut donc encoder les données et les concaténer entre elles avec le code correcteur et ensuite creer les différents ajout complémentaire:\\
+Il faut indiquer la version (si il y en a plusieurs), mode (alpha numeric,...), nombre de caractere , ...\\\\
+Par exemple le mode QrCode est sur 4bits :\\\\
+\begin{tabularx}{\linewidth}{|Y|Y|Y|}
+\hline
+Indicateur binaire & Type charactère \\\hline
+0001  &	Numérique\\
+0010  &	Alphanumérique\\
+0100  &	Binaire\\
+1000  &	Kanji (caractère Japonais)\\
+\hline
+(non exhaustif)
+\end{tabularx}\\\\
+On peut ensuite mettre en place après l'avoir choisi le niveau de correction du code de correction d'erreur afin de créer une structure de messages finale (block de bits)\\
 \\
-$\bullet$ 3 - Implémentation de la correction des erreurs.
-         séparation en blocs des bits de données et géneration du codes correcteurs.\\
-	$\tab$(Capacité à corriger les erreurs :\\
-    $\tab$Niveau L : environ 7 \% de redondance\\
-    $\tab$Niveau M : environ 15 \%\\
-    $\tab$Niveau Q : environ 25 \%\\
-    $\tab$Niveau H : environ 30 \%\\
-    $\tab$-Code correcteur, code de Redd Solomon (et Code de Hamming ))\\
+$\bullet$ 3 - On implémente de la verification et correction des erreurs.
+On sépare le message en bits en blocs de bits de données et on genère le codes correcteurs.\\
+Le code correcteur le plus répandu est Redd-Salomon, il peut avoir différents niveau :\\
 \\
-$\bullet$ 4 - Insérer les données avec le code correcteur dans la matrice.\\
-    
-    Utilisation de masque de patterns (Timing pattern, pattern de detection, pattern d'alignement)\\
-    
-	Placement des éléments:\\
-		$\rightarrow$ motifs de positionnement\\
-		les séparateur (pour distinguer les motifs de pos)\\
-		$\rightarrow$ motifs de synchonisation/Timming patterns permettant de percevoir les contrastes entre les modules (clairs et foncés) et il permettent de determiner la version du Qr code (avec ça taille)\\
-		$\rightarrow$ motifs de d'alignement (pareil mais plus petit que les motifs de positionnement), facilite la lecture en cas de deformation de la matrice.\\
-	$\rightarrow$ zone tranquille autour du symbol/matrice.\\
-	$\rightarrow$Placement des info/codewords\\
+\begin{tabularx}{\linewidth}{|Y|Y|Y|}
+\hline
+Niveau & Redondance & Indicateur binaire \\\hline
+L & environ 7 \% & 01\\
+M & environ 15 \% & 00\\
+Q & environ 25 \% & 11\\
+H & environ 30 \% & 10 \\
+\hline
+\end{tabularx}\\\\
+L'illustration la plus courante de ça mise en place sur internet est celle ci :\\
+\begin{center}
+\includegraphics[scale=0.4]{detectcorrect.jpg} 
+\end{center}
+(Il y a aussi le Code de Hamming et d'autres moins connus)
+Si il n'y a pas de niveau de code correcteur spécifié, pour le Qr Code par exemple la plus petite version de celui ci est utilisée.\\
+Il y a bien sur différents codes correcteurs et manière de vérifier les informations. Par exemple on peut générer un hashcode du message et l’intégrer dans celui pour que lors du scan du Code 2D l'on puisse savoir directement si le message n'a pas été corrompu.\\
 \\
-$\bullet$ 5 - Génération de la matrice et évaluation du résultat retourné.\\
-             optimisisation de la balance entre les modules noirs et les modules blancs et minimisation des occurrences de patterns indésirables\\
-	$\tab$Creation du masque\\
+$\bullet$ 4 - On insère ensuite les données avec le code correcteur une matrice.\\    
+On peut ensuite placer les différents éléments:\\
+$\tab\rightarrow$ les motifs de positionnement qui sont des séparateurs afin distinguer les differents éléments ainsi que de reperer le Code 2D dans un document.\\
+$\tab\rightarrow$ les motifs de synchonisation/Timming patterns permettant de percevoir les contrastes entre les modules (clairs et foncés) et il permettent de determiner la version du Qr code (avec ça taille.)\\
+$\tab\rightarrow$ les motifs de d'alignement qui sont pareil mais plus petit que les motifs de positionnement, il servent dans le cas ou il ya des versions très grande du Code 2D, cela facilite la lecture en cas de deformation de la matrice.\\
+$\tab\rightarrow$ zone tranquille autour du symbol/matrice. Il s-agit de zone vide afin de bien d'elimiter les differents elements.\\
+$\tab\rightarrow$Placement le message en bits (avec ses informations complémentaires).\\
+\\
+Exemple de masques :\\
+\includegraphics[scale=1]{qrcode-complet.jpg} 
+\\\\\\
+$\bullet$ 5 - On génère la matrice et l'évaluation du résultat retourné.\\
+Afin d'avoir une bonne repartition des élements dans le code 2d on utilise des masques de patterns. 
+Cela permet d'optimiser la balance entre les modules noirs et les modules blancs (cela améliore donc la répartition) et aussi de minimiser les occurrences de patterns indésirables \\
+	$\tab$On creer donc différents masques à appliquer et on applique celui/ceux juger le meilleurs/\\
 	$\tab$Application du masque\\
-	$\tab$Informations de format\\
-	$\tab$Informations de version\\
+Exemple du QR code :\\
+\includegraphics[scale=1]{qrcode-masque.jpg} 
+\\ \\
+On peut ensuite intégrer les differentes information de format et de version à des endroits spécifique.
+Exemple du QR code:\\
+\includegraphics[scale=0.65]{qrmainstruct.jpg} 
 \\
-$\bullet$ 6 - Génération du QR Code au format image.\\
+$\bullet$ 6 - Génération du Code 2D au format image.\\
 \\
 (lecture\\
     $\tab$1 - Reconnaître les bits 1 ou 0.\\
-             Le but est de différencier les modules noirs des modules blancs.\\
+Le but est de différencier les modules noirs des modules blancs.\\
     $\tab$2 - Identifier le taux de code correcteur.\\
     $\tab$3 - Identifier la version du QR Code.\\
     $\tab$4 - Découvrir la région à décoder.\\
@@ -75,32 +108,43 @@ $\bullet$ 6 - Génération du QR Code au format image.\\
     $\tab$8 - Afficher le résultat.\\
 )\\
 \\
-Exemple : ZXing Open source en java\\
+On peut prendre comme exemple  un logiciel open source de générateur de Qr Code ZXing ,ecrit en java.\\
 
 \part{Mise en place}
-Le langage uilisé est java, avec swing. Le logiciel est développé sous Intel ij. (a mettre dans utilisation ?)
+Le langage uilisé dans notre projet est le java, avec swing pour générer une interface graphique. Le logiciel est développé sous l'IDE Intel ij.
+
+Le nom de notre Code 2D est Code Fort par son allure en carré "concentrique" rappelant une muraille avec un donjon comme zone d'inclusion  
 \subsection{Encodage et versionnage:}
-...
+Versionnage :
+Apres avoir définit un versionnnage se voulant proportionnel à la taille du message à encoder nous avons décider pour des raisons de simplicité de le laisser fixe à 32x32 cases pour le message en bits en lui même.\\
+IMAGE !!!!!!!!!!!!\\
+\\
+Ecodage:
+Nous avons choisi comme encodage le bit avec un pixel blanc pour le 0 et un noir pour le 1 (traduit en tableau de Boolean dans le code). Les élements sont défini selon leur Code ASCCI. Il seront dont encodé sur 8 bits (lettres, nombres et charactères speciaux)
+\\\\\\
+\includegraphics[scale=0.6]{code_ascii_1.jpg} 
 \\
 \subsection{Convertion:}
 ...
 \\
 \subsection{Code correcteur:}
-...
+Apres avoir commencer de créer un systeme de correction d'erreur avec Redd Salomon, la tache fut simplifié en intégrant seulement un hashcode des donnéees générées cela afin lors de la lecture de verifier l'intégrité du message. (le hashcode nouvelement créé avec le message scanné est comparé à l'ancien hashcode indiqué en début de message et dont la taille est pour notre projet de 32bits (norme java))
 \\
 \subsection{Insertion (les differents motifs):}
-$\tab$Contour faisant zone tranquille/tampon\\
+Un pemier contour au message encodé est créé afin de faire une zone tranquille/tampon autour de celui-ci. Et afin de séparer le message des autres informations indiqué (version dans le cas future ou l'on en rajouterai, format,...). Ce dernier sera lui même entouré d'un contour (double pixel : blanc puis noir) servant de pattern de positionnement.\\
 ...
 \\
 \subsection{ generation matrice ( masque,format,version) :}
-...
+On peut ensuite rajouter les différentes informations complémentaire dans la zone entre le contour exterieur et le contour du message.
+IMAGE !!!!!!!!!!!!\\
 \\
 \subsection{Generation Code 2D:}
 ...
 \\
 
 \part{Utilisation}
-\subsection{Compilation:}
+\subsection{Compilation et description:}
+Diagramme de classe !!!!!!!!!!!!!!!!!!!!!
 \subsection{Execution:}
-
+Lancer le .jar avec
 \end{document}

@@ -9,6 +9,9 @@ public class CodeFort {
 
     public CodeFort(String message) {
 
+        //Creation du HashCode sur 32 bits
+        int hash = message.hashCode();
+
         //transformation du message en byte
         byte[] message_transform = Convertisseur.StringToBytes(message);
         System.out.println("message en byte: "+ message_transform.toString());
@@ -32,17 +35,24 @@ public class CodeFort {
 
         //definition des caracteristique spécifique du message (version,taille message,...)
         //a redefinir [...]
-        int taille = tailleCode(message_transform_b);
-        Double d = Math.ceil(Math.sqrt(message_transform_b.length));//racine carre de la taille du message arrondi a l'entier superieur pour mise en tableau de tableau ('carre')
-        int taille_cote_grille = d.intValue();
+        int taille = 32;//tailleCode(message_transform_b);
 
-        boolean[][] grille_info = new boolean[2][];//[1][]information de format et [1][] information de version
+        if(taille*taille < message_transform_b.length){
+            System.err.println("MESSAGE TROP LONG");
+            return;
+        }
+        boolean[][] grille_info = new boolean[2][];//[1][]information de format/version et [1][] information de hash
+        //info general:
         grille_info[0] = info_format(message_transform_b);
-        grille_info[1] = info_version(message_transform_b);
+        //hash:
+        Integer i = hash;
+        byte[] bi =new byte[32];
+       // bi = i.byteValue();
+        //grille_info[1] = Convertisseur.convertToBooleanArray(i.byteValue()) ;
 
         //transformation en grille de boolean (carre):
-        System.out.println("taille_cote_grille "+taille_cote_grille);
-        boolean[][] grille_boolean = Transformateur.messageEnGrille(message_transform_b,taille_cote_grille);//inscrire dans 2 dimension
+        System.out.println("taille_cote_grille "+taille);
+        boolean[][] grille_boolean = Transformateur.messageEnGrille(message_transform_b,taille);//inscrire dans 2 dimension
         System.out.println("taille grille "+grille_boolean.length);
 
 
@@ -50,7 +60,7 @@ public class CodeFort {
         //a continuer
         //grille_boolean = Transformateur.masque(grille_boolean,1);
         //grille_boolean = Transformateur.masque(grille_boolean,2);
-        //grille_boolean = Transformateur.masque(grille_boolean,3);
+        grille_boolean = Transformateur.masque(grille_boolean,3);
         //grille_boolean = Transformateur.masque(grille_boolean,4);
         //grille_boolean = Transformateur.masque(grille_boolean,5);
         //grille_boolean = Transformateur.masque(grille_boolean,6);
@@ -64,7 +74,7 @@ public class CodeFort {
         System.out.println("grille apres transformation: "+ grille_boolean.toString());
 
         //creation de la grille graphiquement:
-        Grille g = new Grille(grille_boolean,grille_info,taille_cote_grille);
+        Grille g = new Grille(grille_boolean,grille_info,taille);
 
         code = grille_boolean;
     }
@@ -75,24 +85,14 @@ public class CodeFort {
      * @param infos
      * @return
      */
-    public boolean[] info_format(boolean[] infos){
-        //[...]
-        return infos;
-    }
-
-    /**
-     *
-     * @param infos
-     * @return
-     */
-    public boolean[] info_version(boolean[] infos){
+    public boolean[] info_format(boolean[] infos){ //et version future
         //[...]
         return infos;
     }
 
 
     /**
-     * trouver la taille du QRcode adequate (optimale pour le message)
+     * aciennemant trouver la taille du QRcode adequate (optimale pour le message)
      * @param b tableau de boolean
      * @return
      */
@@ -101,6 +101,8 @@ public class CodeFort {
         //b.length
         //faire differentes categories selon la taille [...]
         System.out.println("tailleCode "+ b.length);
-        return b.length*10;
+        Double d = Math.ceil(Math.sqrt(b.length));//racine carre de la taille du message arrondi a l'entier superieur pour mise en tableau de tableau ('carre')
+        int taille_cote_grille = d.intValue();
+        return taille_cote_grille;//b.length*10;
     }
 }
