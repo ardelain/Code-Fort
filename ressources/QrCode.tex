@@ -1,18 +1,25 @@
 \documentclass{article}
 \usepackage{array, tabularx}
-\usepackage{pdfpages}
 
+\usepackage{graphicx}
+
+\usepackage{pdfpages}
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 
 \newdimen\demilargeur
 \demilargeur=\textwidth
 \divide\demilargeur by 2
 \newcommand\tab[1][1cm]{\hspace*{#1}}
-
+\begin{document}
 \title{Protocoles de communication graphique 2D}
 \date{}
-\begin{document}
+\author{Fatima-Ezzohra AKHTEN et Arthur DELAIN}
 \maketitle
+\begin{abstract}
+\begin{center}
+Réseaux, L3 Informatique UCA Clermont-Ferrand,2019\\
+\end{center}
+\end{abstract}
 \part*{Introduction}
 Vous avez sûrement déjà remarqué des pictogrammes fait de petits carrés noirs et blancs que ce soit sur des affichages publicitaires, sur un e-billet, sur l’emballage des produits de consommation, ou même dans un magazine, et vous vous êtes demandé de quoi s’agit-il? En effet, c’est un code 2D appelé plus généralement Tags, QR Codes ou Flashcodes; l'héritier du code barre à une dimension mais ayant une technologie plus avancée.\\
 
@@ -35,8 +42,8 @@ Cela permet d'analyser les entrées afin d'obtenir la variété des caractère �
 \\ \\
 $\bullet$ 2 - Il faut ensuite convertir les données dans un flux de bytes.\\
 \\
-Il faut donc encoder les données et les concaténer entre elles avec le code correcteur et ensuite creer les différents ajout complémentaire:\\
-Il faut indiquer la version (si il y en a plusieurs), mode (alpha numeric,...), nombre de caractere , ...\\\\
+Les premier bits d'information represente souvent le mode (alpha numeric,...).
+Il faut donc encoder les données et les concaténer entre elles avec le code correcteur 
 Par exemple le mode QrCode est sur 4bits :\\\\
 \begin{tabularx}{\linewidth}{|Y|Y|Y|}
 \hline
@@ -46,9 +53,11 @@ Indicateur binaire & Type charactère \\\hline
 0100  &	Binaire\\
 1000  &	Kanji (caractère Japonais)\\
 \hline
-(non exhaustif)
 \end{tabularx}\\\\
-On peut ensuite mettre en place après l'avoir choisi le niveau de correction du code de correction d'erreur afin de créer une structure de messages finale (block de bits)\\
+(non exhaustif)\\
+On peut ensuite mettre en place après l'avoir choisi le niveau de correction du code de correction d'erreur afin de créer une structure de messages finale (block de bits)\\\\
+Et ensuite on peut creer les différents ajout complémentaire:\\
+Il faut indiquer la version (si il y en a plusieurs taille de Code 2D), le format , taille du message , ...\\\\
 \\
 $\bullet$ 3 - On implémente de la verification et correction des erreurs.
 On sépare le message en bits en blocs de bits de données et on genère le codes correcteurs.\\
@@ -98,14 +107,13 @@ $\bullet$ 6 - Génération du Code 2D au format image.\\
 \\
 (lecture\\
     $\tab$1 - Reconnaître les bits 1 ou 0.\\
-Le but est de différencier les modules noirs des modules blancs.\\
-    $\tab$2 - Identifier le taux de code correcteur.\\
-    $\tab$3 - Identifier la version du QR Code.\\
-    $\tab$4 - Découvrir la région à décoder.\\
+    $\tab$2 - Identifier le taux de code correcteur (avec masque -> format).\\
+    $\tab$3 - Identifier la version/format du Code.\\
+    $\tab$4 - Découvrir région à décoder.\\
     $\tab$5 - Lire les données et le code correcteur.\\
     $\tab$6 - Détecter/Corriger les erreurs.\\
-    $\tab$7 - Décoder les données.\\
-    $\tab$8 - Afficher le résultat.\\
+    $\tab$7 - Décoder données.\\
+    $\tab$8 - résultat.\\
 )\\
 \\
 On peut prendre comme exemple  un logiciel open source de générateur de Qr Code ZXing ,ecrit en java.\\
@@ -116,37 +124,34 @@ Le langage uilisé dans notre projet est le java, avec swing pour générer une 
 Le nom de notre Code 2D est Code Fort par son allure en carré "concentrique" rappelant une muraille avec un donjon comme zone d'inclusion  
 \subsection{Encodage et versionnage:}
 Versionnage :
-Apres avoir définit un versionnnage se voulant proportionnel à la taille du message à encoder nous avons décider pour des raisons de simplicité de le laisser fixe à 32x32 cases pour le message en bits en lui même.\\
-IMAGE !!!!!!!!!!!!\\
+Apres avoir définit un versionnnage se voulant proportionnel à la taille du message à encoder nous avons décider pour des raisons de simplicité de le laisser fixe à 32x32 cases pour le message en bits en lui même. (Il n'est donc pas necessaire de l'indiquer, mais celui ci pourra etre ajouter au information de format (8 bit pr le format et 8 bit pour la version et 8 bits pour la taille)) \\
 \\
 Ecodage:
 Nous avons choisi comme encodage le bit avec un pixel blanc pour le 0 et un noir pour le 1 (traduit en tableau de Boolean dans le code). Les élements sont défini selon leur Code ASCCI. Il seront dont encodé sur 8 bits (lettres, nombres et charactères speciaux)
+Notre Version seul peut donc encoder un maximum de 128 caractères. (Cela sans indication d'encodage pouvant par la suite être integré) 
 \\\\\\
 \includegraphics[scale=0.6]{code_ascii_1.jpg} 
-\\
-\subsection{Convertion:}
-...
 \\
 \subsection{Code correcteur:}
 Apres avoir commencer de créer un systeme de correction d'erreur avec Redd Salomon, la tache fut simplifié en intégrant seulement un hashcode des donnéees générées cela afin lors de la lecture de verifier l'intégrité du message. (le hashcode nouvelement créé avec le message scanné est comparé à l'ancien hashcode indiqué en début de message et dont la taille est pour notre projet de 32bits (norme java))
 \\
 \subsection{Insertion (les differents motifs):}
 Un pemier contour au message encodé est créé afin de faire une zone tranquille/tampon autour de celui-ci. Et afin de séparer le message des autres informations indiqué (version dans le cas future ou l'on en rajouterai, format,...). Ce dernier sera lui même entouré d'un contour (double pixel : blanc puis noir) servant de pattern de positionnement.\\
-...
+C'est l'alterance entre ces différents contour permet de calculer la taille d'un pixel
 \\
 \subsection{ generation matrice ( masque,format,version) :}
-On peut ensuite rajouter les différentes informations complémentaire dans la zone entre le contour exterieur et le contour du message.
-IMAGE !!!!!!!!!!!!\\
+On peut ensuite rajouter les différentes informations complémentaires dans la zone entre le contour exterieur et le contour du message.\\
+On applique ensuite un masque (choisi par default ici, il aurait fallu caluler celui ayant la meilleur répartion vis à vis des autres).
 \\
 \subsection{Generation Code 2D:}
-...
-\\
+Après avoir optenu une matrix de 0 et de 1 (utilisation du Boolean[][]) on peut directement générer le Code 2D Graphique correspondant en plaçant des pixels noirs aux emplacements des 1 (comme dit precedemment).
+\\\\
+\includegraphics[scale=0.5]{schema.png} 
+\\\\
 
 \part{Utilisation}
-\subsection{Compilation et description:}
-Diagramme de classe !!!!!!!!!!!!!!!!!!!!!\\
-\subsection{Execution:}
-Lancer le .jar placé dans la racine du projet:
-Etapes:
-1) rentrer
+Lancer le .jar (avec java) placé dans la racine du projet:\\
+Etapes:\\
+$\tab$1) rentrer le texte dans la fentre pop-up \\
+$\tab$2) generer l'image correspondante (bouton correspondant)
 \end{document}

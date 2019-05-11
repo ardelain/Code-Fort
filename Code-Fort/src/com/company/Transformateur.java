@@ -33,6 +33,52 @@ public class Transformateur {
         return grille;
     }
 
+
+    /**
+     *
+     * @param b
+     * @param b_info
+     * @return
+     */
+    public static boolean[][] ajout_infos(boolean[][] b,boolean[][] b_info){//,boolean[] b_info, int racine_sup
+        System.out.println("contour ajout_r_info ");
+        System.out.println("b_info "+b_info.length);
+        System.out.println("b "+b.length);
+        int y = 0;
+        //ajout des bords
+        for(int i = 0;i<b.length;i++){
+            System.out.println("i "+i +" y "+y);
+            if(i>= 7 && i<=b.length-7 ){
+                //haut
+                if(y < b_info[0].length){
+                    //b[i][4] = true;
+                    b[i][4] = b_info[0][y];
+                }
+                //bas
+                if(y < b_info[1].length){
+                   //b[i][b.length-5] = true;
+                    b[i][b.length-5] = b_info[1][y];
+                }
+
+
+                //gauche
+                if(y < b_info[0].length){
+                    b[4][i] = b_info[0][y];//ligne noire
+                }
+
+                //droite
+                if(y < b_info[1].length){
+                    b[b.length-5][i] = b_info[1][y];//ligne noire
+                }
+
+
+                y++;
+            }
+        }
+
+        return b;
+    }
+
     /**
      * contourne le datagramme d'une ligne blacnhe et noire
      * @param by

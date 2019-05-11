@@ -35,7 +35,7 @@ public class Grille extends JFrame
         JPanel grille = new Code2D(10,taille,message,info);//taille/
         f.add(grille);
 
-        JButton button = new JButton("Open file");
+        JButton button = new JButton("Générer Image");
         //ajout bouton pour générer l'image correspondante
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

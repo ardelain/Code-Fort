@@ -45,15 +45,18 @@ public class CodeFort {
         //info general:
         grille_info[0] = info_format(message_transform_b);
         //hash:
-        Integer i = hash;
-        byte[] bi =new byte[32];
-       // bi = i.byteValue();
-        //grille_info[1] = Convertisseur.convertToBooleanArray(i.byteValue()) ;
+        grille_info[1] = Convertisseur.byteArray2BitArray(Convertisseur.intToByte(hash)) ;
+        System.out.println("hash  ");
+        for(boolean b: grille_info[1] ){
+            System.out.print(b+" ");
+        }
+        System.out.println(" ");
 
         //transformation en grille de boolean (carre):
         System.out.println("taille_cote_grille "+taille);
         boolean[][] grille_boolean = Transformateur.messageEnGrille(message_transform_b,taille);//inscrire dans 2 dimension
         System.out.println("taille grille "+grille_boolean.length);
+
 
 
         //mise en place du masque
@@ -71,6 +74,11 @@ public class CodeFort {
         grille_boolean = Transformateur.ajout_rempart_info(grille_boolean);
         grille_boolean = Transformateur.contour(grille_boolean);
 
+
+        //integration des infos complementaire
+        grille_boolean = Transformateur.ajout_infos(grille_boolean,grille_info);
+
+
         System.out.println("grille apres transformation: "+ grille_boolean.toString());
 
         //creation de la grille graphiquement:
@@ -81,18 +89,22 @@ public class CodeFort {
 
 
     /**
-     *
+     * permet de trouver les information complemataire de format (et dans le future de la version)
      * @param infos
      * @return
      */
     public boolean[] info_format(boolean[] infos){ //et version future
-        //[...]
-        return infos;
+        System.out.println("info_format");
+        int num_masque = 3; //choix du masque par default
+        //ajout du futur format redd salomon avec le taux de correction
+        boolean[] t = Convertisseur.byteArray2BitArray(Convertisseur.intToByte(num_masque));
+        System.out.println("-->>"+t.length);
+        return t ;
     }
 
 
     /**
-     * aciennemant trouver la taille du QRcode adequate (optimale pour le message)
+     * anciennemant trouver la taille du QRcode adequate (optimale pour le message)
      * @param b tableau de boolean
      * @return
      */

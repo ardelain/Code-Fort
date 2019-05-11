@@ -1,5 +1,8 @@
 package com.company;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 public class Convertisseur {
 
     /**
@@ -75,5 +78,25 @@ public class Convertisseur {
             result[i] = b;
         }
         return result;
+    }
+
+
+
+    public static byte[] intToByte(int value) {
+        ByteBuffer _intShifter = ByteBuffer.allocate(Integer.SIZE / Byte.SIZE)
+                .order(ByteOrder.LITTLE_ENDIAN);
+        _intShifter.clear();
+        _intShifter.putInt(value);
+        return _intShifter.array();
+    }
+
+    public static int byteToInt(byte[] data)
+    {
+        ByteBuffer _intShifter = ByteBuffer.allocate(Integer.SIZE / Byte.SIZE)
+                .order(ByteOrder.LITTLE_ENDIAN);
+        _intShifter.clear();
+        _intShifter.put(data, 0, Integer.SIZE / Byte.SIZE);
+        _intShifter.flip();
+        return _intShifter.getInt();
     }
 }
