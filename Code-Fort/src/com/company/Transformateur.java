@@ -28,8 +28,12 @@ public class Transformateur {
                 }
                 System.out.print(grille[i][j]+" ");
             }
-            System.out.print("\n");
+            if(y >= mess.length){
+                break;
+            }
+            System.out.println("");
         }
+        System.out.print("\n");
         return grille;
     }
 
