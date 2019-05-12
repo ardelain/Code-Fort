@@ -24,7 +24,7 @@ public class Grille extends JFrame
     {
         System.out.println("Grille JFrame");
         //creation de la fenetre
-        JFrame f = new JFrame("Affichage QR CODE en Java");
+        JFrame f = new JFrame("Code-Fort");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(500, 550);
 
@@ -42,7 +42,7 @@ public class Grille extends JFrame
                 /* init du filechooser */
                 JFileChooser fc = new JFileChooser();
                 /* affichage du dialog et test si le bouton ok est pressé */
-                if (fc.showOpenDialog(f) == JFileChooser.APPROVE_OPTION) {
+                if (fc.showDialog(f,"générer") == JFileChooser.APPROVE_OPTION) {
                     try {
                         /* demande au système d'ouvrir le fichier précédemment séléctionné */
                         Desktop.getDesktop().open(fc.getCurrentDirectory());

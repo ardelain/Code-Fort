@@ -96,7 +96,7 @@ public class CodeFort {
     public boolean[] info_format(boolean[] infos){ //et version future
         System.out.println("info_format");
         int num_masque = 3; //choix du masque par default
-        //ajout du futur format redd salomon avec le taux de correction
+        //ajout du futur format redd salomon avec le taux de correction ainsi que les differents masque utilisé
         boolean[] t = Convertisseur.byteArray2BitArray(Convertisseur.intToByte(num_masque));
         System.out.println("-->>"+t.length);
         return t ;

@@ -23,7 +23,7 @@ public class TestText {
      *
      */
     public TestText() {
-        frame = new JFrame("Test");
+        frame = new JFrame("Message Code-Fort");
         frame.setSize(300, 200);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setResizable(true);
@@ -41,7 +41,7 @@ public class TestText {
         JPanel panel = new JPanel(new BorderLayout());
         text = new JTextField();
         lab = new JLabel("Entrer un message: ");
-        button = new JButton("Test");
+        button = new JButton("Entrer");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 message = text.getText();
