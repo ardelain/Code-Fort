@@ -88,21 +88,21 @@ $\tab\rightarrow$ les motifs de d'alignement qui sont pareil mais plus petit que
 $\tab\rightarrow$ zone tranquille autour du symbol/matrice. Il s-agit de zone vide afin de bien d'elimiter les differents elements.\\
 $\tab\rightarrow$Placement le message en bits (avec ses informations complémentaires).\\
 \\
-Exemple de masques :\\
-\includegraphics[scale=1]{qrcode-complet.jpg} 
+(voir schema Qr Code pour exemple)
 \\\\\\
 $\bullet$ 5 - On génère la matrice et l'évaluation du résultat retourné.\\
 Afin d'avoir une bonne repartition des élements dans le code 2d on utilise des masques de patterns. 
 Cela permet d'optimiser la balance entre les modules noirs et les modules blancs (cela améliore donc la répartition) et aussi de minimiser les occurrences de patterns indésirables \\
-	$\tab$On creer donc différents masques à appliquer et on applique celui/ceux juger le meilleurs/\\
+	$\tab$On creer donc différents masques à appliquer et on applique celui/ceux juger le meilleurs (note donné à chaque masque)\\
 	$\tab$Application du masque\\
 Exemple du QR code :\\
 \includegraphics[scale=1]{qrcode-masque.jpg} 
 \\ \\
 On peut ensuite intégrer les differentes information de format et de version à des endroits spécifique.
 Exemple du QR code:\\
+\begin{center}
 \includegraphics[scale=0.65]{qrmainstruct.jpg} 
-\\
+\end{center}
 $\bullet$ 6 - Génération du Code 2D au format image.\\
 \\
 (lecture\\
@@ -127,11 +127,12 @@ Versionnage :
 Apres avoir définit un versionnnage se voulant proportionnel à la taille du message à encoder nous avons décider pour des raisons de simplicité de le laisser fixe à 32x32 cases pour le message en bits en lui même. (Il n'est donc pas necessaire de l'indiquer, mais celui ci pourra etre ajouter au information de format (8 bit pr le format et 8 bit pour la version et 8 bits pour la taille)) \\
 \\
 Ecodage:
-Nous avons choisi comme encodage le bit avec un pixel blanc pour le 0 et un noir pour le 1 (traduit en tableau de Boolean dans le code). Les élements sont défini selon leur Code ASCCI. Il seront dont encodé sur 8 bits (lettres, nombres et charactères speciaux)
+Nous avons choisi comme encodage le bit avec un pixel blanc pour le 0 et un noir pour le 1 (traduit en tableau de Boolean dans le code). Les élements sont défini selon leur Code ASCII. Il seront dont encodé sur 8 bits (lettres, nombres et charactères speciaux)
 Notre Version seul peut donc encoder un maximum de 128 caractères. (Cela sans indication d'encodage pouvant par la suite être integré) 
 \\\\\\
-\includegraphics[scale=0.6]{code_ascii_1.jpg} 
-\\
+\begin{center}
+\includegraphics[scale=0.5]{code_ascii_1.jpg} 
+\end{center}
 \subsection{Code correcteur:}
 Apres avoir commencer de créer un systeme de correction d'erreur avec Redd Salomon, la tache fut simplifié en intégrant seulement un hashcode des donnéees générées cela afin lors de la lecture de verifier l'intégrité du message. (le hashcode nouvelement créé avec le message scanné est comparé à l'ancien hashcode indiqué en début de message et dont la taille est pour notre projet de 32bits (norme java))
 \\
