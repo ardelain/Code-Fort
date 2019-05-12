@@ -11,7 +11,7 @@
 \divide\demilargeur by 2
 \newcommand\tab[1][1cm]{\hspace*{#1}}
 \begin{document}
-\title{Protocoles de communication graphique 2D}
+\title{Protocole de communication graphique 2D}
 \date{}
 \author{Fatima-Ezzohra AKHTEN et Arthur DELAIN}
 \maketitle
@@ -116,7 +116,7 @@ $\bullet$ 6 - Génération du Code 2D au format image.\\
     $\tab$8 - résultat.\\
 )\\
 \\
-On peut prendre comme exemple  un logiciel open source de générateur de Qr Code ZXing ,ecrit en java.\\
+On peut prendre comme exemple  un logiciel open source de générateur de Qr Code ZXing, ecrit en java.\\
 
 \part{Mise en place}
 Le langage uilisé dans notre projet est le java, avec swing pour générer une interface graphique. Le logiciel est développé sous l'IDE Intel ij.
@@ -142,17 +142,28 @@ C'est l'alterance entre ces différents contour permet de calculer la taille d'u
 \\
 \subsection{ generation matrice ( masque,format,version) :}
 On peut ensuite rajouter les différentes informations complémentaires dans la zone entre le contour exterieur et le contour du message.\\
+taille information complementaire : 32 bits -> 4 bits pour le masque, 4 bits code correcteur, 8 bits pour la taille du message, 8 bits pour le format et 8 bits pour la version.
 On applique ensuite un masque (choisi par default ici, il aurait fallu caluler celui ayant la meilleur répartion vis à vis des autres).
 \\
 \subsection{Generation Code 2D:}
 Après avoir optenu une matrix de 0 et de 1 (utilisation du Boolean[][]) on peut directement générer le Code 2D Graphique correspondant en plaçant des pixels noirs aux emplacements des 1 (comme dit precedemment).
 \\\\
-\includegraphics[scale=0.5]{schema.png} 
+\includegraphics[scale=0.5]{schema2.png} 
 \\\\
 
 \part{Utilisation}
 Lancer le .jar (avec java) placé dans la racine du projet:\\
 Etapes:\\
 $\tab$1) rentrer le texte dans la fentre pop-up \\
-$\tab$2) generer l'image correspondante (bouton correspondant)
+\begin{center}
+\includegraphics[scale=1]{exemple_text.png} 
+\end{center}
+$\tab$2) generer l'image correspondante (bouton Entrer de la fenetre pop up)
+\begin{center}
+\includegraphics[scale=0.5]{exemple.png}
+\end{center}
+$\tab$2) enregistrer l'image (bouton correspondant)
+\begin{center}
+\includegraphics[scale=0.5]{exemple_generation.png} 
+\end{center}
 \end{document}

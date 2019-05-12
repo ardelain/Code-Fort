@@ -20,6 +20,14 @@ public class Convertisseur {
         return b;
     }
 
+    public static boolean[] intToBooleanTab(int number, int taille) {
+        final boolean[] ret = new boolean[taille];
+        for (int i = 0; i < taille; i++) {
+            ret[taille - 1 - i] = (1 << i & number) != 0;
+        }
+        return ret;
+    }
+
    //Converting from bytes to booleans:
 
     /**
@@ -78,6 +86,35 @@ public class Convertisseur {
             result[i] = b;
         }
         return result;
+    }
+
+
+    public static byte[] toByteArrayWithSize(int value,int size) {
+        byte[] tab = new byte[size];
+        int i = 0;
+        byte[] bt = ByteBuffer.allocate(size).putInt(value).array();
+        for(byte b:  bt)
+        {
+            tab[i] =b;
+            i++;
+            if(i >= size){
+                return tab;
+            }
+        }
+        return tab ;
+    }
+
+
+
+    /** length should be less than 4 (for int) **/
+    public static long byteToInt(byte[] bytes, int taille) {
+        int val = 0;
+        if(taille>4) throw new RuntimeException("entier trop grand pour la taille indiquée");
+        for (int i = 0; i < taille; i++) {
+            val=val<<8;
+            val=val|(bytes[i] & 0xFF);
+        }
+        return val;
     }
 
 

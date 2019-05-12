@@ -42,12 +42,9 @@ public class Transformateur {
      */
     public static boolean[][] ajout_infos(boolean[][] b,boolean[][] b_info){//,boolean[] b_info, int racine_sup
         System.out.println("contour ajout_r_info ");
-        System.out.println("b_info "+b_info.length);
-        System.out.println("b "+b.length);
         int y = 0;
         //ajout des bords
         for(int i = 0;i<b.length;i++){
-            System.out.println("i "+i +" y "+y);
             if(i>= 7 && i<=b.length-7 ){
                 //haut
                 if(y < b_info[0].length){
@@ -59,23 +56,17 @@ public class Transformateur {
                    //b[i][b.length-5] = true;
                     b[i][b.length-5] = b_info[1][y];
                 }
-
-
                 //gauche
                 if(y < b_info[0].length){
                     b[4][i] = b_info[0][y];//ligne noire
                 }
-
                 //droite
                 if(y < b_info[1].length){
                     b[b.length-5][i] = b_info[1][y];//ligne noire
                 }
-
-
                 y++;
             }
         }
-
         return b;
     }
 
@@ -86,7 +77,6 @@ public class Transformateur {
      */
     public static boolean[][] contour(boolean[][] by){
         System.out.println("contour ");
-
         boolean[][] nb = new boolean[by.length+4][by.length+4];
         System.out.println("taille grille: "+by.length);
         System.out.println("taille nv grille: "+nb.length);
